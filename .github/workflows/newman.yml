@@ -1,0 +1,23 @@
+name: Newman API Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Newman
+        run: npm install -g newman
+
+      - name: Run Booking collection
+        run: newman run collections/Booking.postman_collection.json
+
+      - name: Run UserAPI collection
+        run: newman run collections/UserAPI.postman_collection.json
