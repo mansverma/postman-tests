@@ -12,8 +12,10 @@ pipeline {
             steps {
                 sh '''
                     newman run collections/Booking.postman_collection.json \
-                        -r cli,htmlextra \
-                        --reporter-htmlextra-export results/booking-report.html
+                        -r cli,htmlextra,junit,json \
+                        --reporter-htmlextra-export results/booking-report.html \
+                        --reporter-junit-export results/booking-report.xml \
+                        --reporter-json-export results/booking-report.json
                 '''
             }
         }
@@ -22,8 +24,10 @@ pipeline {
             steps {
                 sh '''
                     newman run collections/UserAPI.postman_collection.json \
-                        -r cli,htmlextra \
-                        --reporter-htmlextra-export results/userapi-report.html
+                        -r cli,htmlextra,junit,json \
+                        --reporter-htmlextra-export results/userapi-report.html \
+                        --reporter-junit-export results/userapi-report.xml \
+                        --reporter-json-export results/userapi-report.json
                 '''
             }
         }
@@ -31,7 +35,8 @@ pipeline {
 
     post {
         always {
-            archiveArtifacts artifacts: 'results/*.html', allowEmptyArchive: true
+            junit allowEmptyResults: true, testResults: 'results/*.xml'
+            archiveArtifacts artifacts: 'results/*', allowEmptyArchive: true
         }
         success {
             echo 'All tests passed!'
