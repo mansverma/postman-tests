@@ -31,14 +31,7 @@ pipeline {
 
     post {
         always {
-            publishHTML(target: [
-                allowMissing: false,
-                alwaysLinkToLastBuild: true,
-                keepAll: true,
-                reportDir: 'results',
-                reportFiles: 'booking-report.html,userapi-report.html',
-                reportName: 'Newman Test Reports'
-            ])
+            archiveArtifacts artifacts: 'results/*.html', allowEmptyArchive: true
         }
         success {
             echo 'All tests passed!'
